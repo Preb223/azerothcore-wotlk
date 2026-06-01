@@ -2776,7 +2776,7 @@ ItemDelete.KeepDays = 0
 #        Default: 0 - Off, Use DB values
 #                 1 - On, Enforce DBC Values (default)
 
-DBC.EnforceItemAttributes = 1
+DBC.EnforceItemAttributes = 0
 
 #
 #    Rate.Drop.Item.Poor

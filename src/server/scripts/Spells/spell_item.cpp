@@ -2941,6 +2941,116 @@ class spell_item_ashbringer : public SpellScript
     }
 };
 
+// Custom Heirloom Ashbringer Fire Blast scaling (spell 18112)
+class spell_item_ashbringer_fire_blast : public SpellScript
+{
+    PrepareSpellScript(spell_item_ashbringer_fire_blast);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 baseDamage = level * 12; // scales to 720 at level 60, 960 at level 80
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_ashbringer_fire_blast::CalculateDamage);
+    }
+};
+
+// Custom Heirloom Corrupted Ashbringer Lifesteal scaling (spell 28414)
+class spell_item_corrupted_ashbringer_lifesteal : public SpellScript
+{
+    PrepareSpellScript(spell_item_corrupted_ashbringer_lifesteal);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 baseDamage = std::max(5u, uint32(level * 200.0f / 60.0f)); // scales to 200 at level 60, 266 at level 80
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_corrupted_ashbringer_lifesteal::CalculateDamage);
+    }
+};
+
+// Custom Heirloom Skullflame Shield Flame Buffer scaling (spell 18818)
+class spell_item_skullflame_shield_flame_buffer : public SpellScript
+{
+    PrepareSpellScript(spell_item_skullflame_shield_flame_buffer);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 baseDamage = std::max(5u, uint32(level * 35.0f / 54.0f));
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_skullflame_shield_flame_buffer::CalculateDamage);
+    }
+};
+
+// Custom Heirloom Skullflame Shield Drain Life scaling (spell 18817)
+class spell_item_skullflame_shield_drain_life : public SpellScript
+{
+    PrepareSpellScript(spell_item_skullflame_shield_drain_life);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 baseDamage = std::max(5u, uint32(level * 35.0f / 54.0f));
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_skullflame_shield_drain_life::CalculateDamage);
+    }
+};
+
+// Custom Heirloom Thunderfury Cyclone proc scaling (spell 21992)
+class spell_item_thunderfury : public SpellScript
+{
+    PrepareSpellScript(spell_item_thunderfury);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 baseDamage = level * 5; // scales to 300 at level 60, 400 at level 80
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_thunderfury::CalculateDamage);
+    }
+};
+
 enum MagicEater
 {
     SPELL_WILD_MAGIC                             = 58891,
@@ -6146,6 +6256,11 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_map_of_the_geyser_fields);
     RegisterSpellScript(spell_item_vanquished_clutches);
     RegisterSpellScript(spell_item_ashbringer);
+    RegisterSpellScript(spell_item_ashbringer_fire_blast);
+    RegisterSpellScript(spell_item_corrupted_ashbringer_lifesteal);
+    RegisterSpellScript(spell_item_skullflame_shield_flame_buffer);
+    RegisterSpellScript(spell_item_skullflame_shield_drain_life);
+    RegisterSpellScript(spell_item_thunderfury);
     RegisterSpellScript(spell_magic_eater_food);
     RegisterSpellScript(spell_item_refocus);
     RegisterSpellScript(spell_item_shimmering_vessel);
