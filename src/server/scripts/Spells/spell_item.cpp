@@ -3051,6 +3051,156 @@ class spell_item_thunderfury : public SpellScript
     }
 };
 
+// Custom Heirloom Judgement 5-Piece Spell Power scaling (spell 99020)
+class spell_item_judgement_spell_power : public AuraScript
+{
+    PrepareAuraScript(spell_item_judgement_spell_power);
+
+    void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            amount = uint32(level * 47.0f / 60.0f); // scales to 47 spell power at level 60, 62 at level 80
+        }
+    }
+
+    void Register() override
+    {
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_item_judgement_spell_power::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_DAMAGE_DONE);
+    }
+};
+
+// Custom Heirloom Judgement 8-Piece Holy Damage proc scaling (spell 99022)
+class spell_item_judgement_holy_damage : public SpellScript
+{
+    PrepareSpellScript(spell_item_judgement_holy_damage);
+
+    void CalculateDamage()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            uint32 minDmg = level;
+            uint32 maxDmg = uint32(level * 67.0f / 60.0f);
+            uint32 baseDamage = urand(minDmg, maxDmg); // scales to 60-67 holy damage at level 60, 80-89 at level 80
+            SetHitDamage(baseDamage);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_judgement_holy_damage::CalculateDamage);
+    }
+};
+
+// Custom Heirloom Nemesis 3-Piece Spell Power scaling (spell 99023)
+class spell_item_nemesis_spell_power : public AuraScript
+{
+    PrepareAuraScript(spell_item_nemesis_spell_power);
+
+    void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            amount = uint32(level * 23.0f / 60.0f); // scales to 23 spell power at level 60, 30 at level 80
+        }
+    }
+
+    void Register() override
+    {
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_item_nemesis_spell_power::CalculateAmount, EFFECT_0, SPELL_AURA_MOD_DAMAGE_DONE);
+    }
+};
+
+// Custom Heirloom Nemesis 5-Piece Demonic Ally pet buff scaling (spell 99025)
+class spell_item_nemesis_demonic_ally : public AuraScript
+{
+    PrepareAuraScript(spell_item_nemesis_demonic_ally);
+
+    void CalculateStamina(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            amount = uint32(level * 20.0f / 60.0f); // scales to 20 stamina at level 60, 26 at level 80
+        }
+    }
+
+    void CalculateResistance(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            amount = uint32(level * 130.0f / 60.0f); // scales to 130 resistance at level 60, 173 at level 80
+        }
+    }
+
+    void Register() override
+    {
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_item_nemesis_demonic_ally::CalculateStamina, EFFECT_0, SPELL_AURA_MOD_STAT);
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_item_nemesis_demonic_ally::CalculateResistance, EFFECT_1, SPELL_AURA_MOD_BASE_RESISTANCE);
+    }
+};
+
+// Custom Heirloom Bloodfang 8-Piece Proc scaling (spell 99030)
+class spell_item_bloodfang_proc : public SpellScript
+{
+    PrepareSpellScript(spell_item_bloodfang_proc);
+
+    void HandleHit()
+    {
+        Unit* caster = GetCaster();
+        if (caster)
+        {
+            uint8 level = caster->GetLevel();
+            
+            // Original: 283-317 damage at level 60
+            uint32 minDmg = uint32(level * 283.0f / 60.0f);
+            uint32 maxDmg = uint32(level * 317.0f / 60.0f);
+            uint32 damage = urand(minDmg, maxDmg);
+            SetHitDamage(damage);
+            
+            // Original: 50 heal at level 60
+            uint32 heal = uint32(level * 50.0f / 60.0f);
+            SetHitHeal(heal);
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_item_bloodfang_proc::HandleHit);
+    }
+};
+
+// Custom Heirloom Transcendence 8-Piece Proc scaling (spell 99039)
+class spell_item_transcendence_renew_proc : public AuraScript
+{
+    PrepareAuraScript(spell_item_transcendence_renew_proc);
+
+    void CalculateHealAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        if (Unit* caster = GetCaster())
+        {
+            uint8 level = caster->GetLevel();
+            
+            // Original: 63 heal per tick at level 60 (Spell 22009)
+            amount = int32(level * 63.0f / 60.0f);
+        }
+    }
+
+    void Register() override
+    {
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_item_transcendence_renew_proc::CalculateHealAmount, EFFECT_0, SPELL_AURA_PERIODIC_HEAL);
+    }
+};
+
 enum MagicEater
 {
     SPELL_WILD_MAGIC                             = 58891,
@@ -6261,6 +6411,12 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_skullflame_shield_flame_buffer);
     RegisterSpellScript(spell_item_skullflame_shield_drain_life);
     RegisterSpellScript(spell_item_thunderfury);
+    RegisterSpellScript(spell_item_judgement_spell_power);
+    RegisterSpellScript(spell_item_judgement_holy_damage);
+    RegisterSpellScript(spell_item_nemesis_spell_power);
+    RegisterSpellScript(spell_item_nemesis_demonic_ally);
+    RegisterSpellScript(spell_item_bloodfang_proc);
+    RegisterSpellScript(spell_item_transcendence_renew_proc);
     RegisterSpellScript(spell_magic_eater_food);
     RegisterSpellScript(spell_item_refocus);
     RegisterSpellScript(spell_item_shimmering_vessel);
