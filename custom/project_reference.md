@@ -41,6 +41,8 @@
 - **Server**: AzerothCore, running via Docker Compose
 - **Client Path**: `C:\ChromieCraft_3.3.5a\`
 - **Custom Work**: Heirloom item sets, legendary weapons, necklaces, rings, vendor system
+- **LAN IP**: `192.168.1.58` (Wi-Fi 2 adapter) — update if DHCP assigns a new IP
+- **Player Guide**: `C:\ChromieCraft_3.3.5a\README - How to Connect.txt`
 
 ---
 
@@ -269,12 +271,16 @@ custom/
 ├── build_heirlooms.py         # Main pipeline (DBC + SQL + MPQ)
 ├── heirloom_config.py         # Set definitions for pipeline
 ├── package_client_patch.py    # Builds patch-4.MPQ from patch_data/
+├── create_account.py          # Account creation helper (SOAP + DB fallback)
+├── project_reference.md       # THIS FILE (living reference)
 ├── original_dbcs/             # Pristine 3.3.5a DBC files
+│   ├── CharBaseInfo.dbc
 │   ├── Item.dbc
 │   ├── ItemSet.dbc
 │   ├── ScalingStatDistribution.dbc
 │   └── Spell.dbc
-├── patch_data/DBFilesClient/  # Patched DBCs (input for MPQ)
+├── patch_data/DBFilesClient/  # Patched DBCs (input for MPQ + Docker mounts)
+│   ├── CharBaseInfo.dbc
 │   ├── Item.dbc
 │   ├── ItemSet.dbc
 │   ├── ScalingStatDistribution.dbc
@@ -282,15 +288,24 @@ custom/
 └── backups/                   # Timestamped backups
 ```
 
+### Docker Compose Override
+- **File**: `docker-compose.override.yml` (repo root)
+- DBC volume mounts point to `./custom/patch_data/DBFilesClient/*.dbc`
+- Contains environment variables for playerbots, AH bot, individual progression
+
 ### Mod Assistant (C++ source)
 ```
 modules/mod-assistant/src/
-├── mod_assistant.cpp          # Script registration + weapon scaling + proc scaling
+├── mod_assistant.cpp          # Script registration + weapon scaling + proc scaling + Undead Paladin restriction
 ├── mod_assistant.h            # Enums, vendor IDs, gossip strings, class declaration
 ├── mod_assistant_npc.cpp      # Gossip menu handler (OnGossipSelect state machine)
 ├── mod_assistant_config.cpp   # Config loading from .conf
 └── mod_assistant_functions.cpp # Utility functions
 ```
+
+### Additional Modules
+- `modules/mod-learn-spells/` — Auto-learns class spells on level up (no trainer visits needed)
+  - Config: `LearnSpells.Enable = 1`, `LearnSpells.MaxLevel = 80`
 
 ### Client Patch
 - **Output**: `C:\ChromieCraft_3.3.5a\Data\patch-4.MPQ`
@@ -446,6 +461,13 @@ docker exec ac-database mysqldump -u root -ppassword acore_world item_template -
 - Necklaces/Rings vendor: **Trinkets & Miscellaneous** (9000051)
 - Corruptor T5 set: **Nemesis base stats** + **real T5 set bonuses**
 - Custom scripts: **Live in `custom/` subdirectory**
+- Dual spec: **Available from level 1** (MinDualSpecLevel = 1)
+- Mail delivery: **Instant** (MailDeliveryDelay = 0)
+- Auto-account creation: **Via `custom/create_account.py`** (SOAP + DB fallback)
+- Undead Paladin: **Restricted to account ID 1 (MALIKYTH)** via `AccountScript::CanAccountCreateCharacter` in mod_assistant.cpp
+- Auto-learn spells: **Enabled** via `mod-learn-spells` module
+- Quest item sparkles: **Already enabled** (`Visibility.ObjectSparkles = 1`)
+- Playerbots: **150–200 bots**, synced level with players, max 3 levels above highest player, blue gear cap, 50% imperfect gear, bots invite players, chat enabled, BGs enabled
 
 ---
 
@@ -467,6 +489,10 @@ docker exec ac-database mysqldump -u root -ppassword acore_world item_template -
 
 8. **PowerShell multiline Python**: Use script files instead of `python -c "..."` for anything with quotes or multiline — PowerShell escaping is painful.
 
+9. **Docker DBC volume mounts**: `docker-compose.override.yml` bind-mounts DBC files into the worldserver container. If you move/delete those files, the container will fail to start with a cryptic mount error. The mounts must point to `./custom/patch_data/DBFilesClient/`. Always use `docker compose up -d` (not `restart`) after changing volume paths — `restart` reuses the old container config.
+
+10. **Realmlist for LAN**: The `address` and `localAddress` in `acore_auth.realmlist` must be the host's LAN IP (not 127.0.0.1) for other machines to connect. Update with: `UPDATE realmlist SET address='<LAN_IP>', localAddress='<LAN_IP>' WHERE id=1;`
+
 ---
 
 ## Changelog
@@ -475,4 +501,6 @@ docker exec ac-database mysqldump -u root -ppassword acore_world item_template -
 
 | Date | Summary |
 |------|---------|
+| 2026-06-14 | Installed mod-learn-spells (auto-learn class spells on level up). Added Undead Paladin (race=5/class=2) restricted to account 1: playercreateinfo DB row + CharBaseInfo.dbc patch + AccountScript in mod_assistant.cpp. Updated playerbots: 150-200 bots, invite players, chat broadcasts, blue gear cap, 50% imperfect gear, BG queuing, smart scale max 60. Rebuilt patch-4.MPQ with CharBaseInfo.dbc. |
+| 2026-06-14 | Added LAN config (realmlist, firewall, player guide), QoL settings (dual spec lvl 1, instant mail), create_account.py, docker-compose.override.yml docs, gotchas #9-10. Fixed DBC volume mount paths after repo cleanup. |
 | 2026-06-14 | Initial creation. Documented all 89 items (90000–90108), 10 set IDs (995–1004), vendor architecture, DBC formats, pipeline workflow, C++ scaling scripts, legendary weapon spells, XP bonus jewelry, user preferences, and 8 gotchas. Added mandatory self-referencing instructions. |
