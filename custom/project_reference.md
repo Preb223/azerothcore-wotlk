@@ -138,7 +138,9 @@ docker exec ac-database mysqldump -u root -ppassword acore_world <table> --where
 | 90106 | Signet of Arcane Authority (Caster Ring, 5% XP) |
 | 90107 | Signet of the Bastion (Tank Ring, 5% XP) |
 | 90108 | Signet of Lethal Precision (Melee Ring, 5% XP) |
-| **Next available**: 90109+ | |
+| 90109 | Bag of Infinite Holdings (36-Slot Heirloom Bag) |
+| 90110 | Barman Shanker (1H Dagger Heirloom) |
+| **Next available**: 90111+ | |
 
 ### Custom Set IDs
 
