@@ -503,6 +503,7 @@ docker exec ac-database mysqldump -u root -ppassword acore_world item_template -
 
 | Date | Summary |
 |------|---------|
+| 2026-08-15 | Fixed Barman Shanker (90110). Added 3 custom 36-slot Heirloom Quivers & Ammo Pouches (90111-90113): Quiver of the Infinite Hunt (universal 36-slot), Quiver of the Windrunner (arrows 36-slot), and Ammo Pouch of the Dragonflight (bullets 36-slot) with built-in 15% speed, +2% crit, and +5% XP. Integrated with Gabriella Special Item Vendor, patched Item.dbc, rebuilt patch-4.MPQ, updated useful_gm_commands.md with class colors and formatting, and created timestamped database backup. |
 | 2026-06-14 | Installed mod-learn-spells (auto-learn class spells on level up). Added Undead Paladin (race=5/class=2) restricted to account 1: playercreateinfo DB row + CharBaseInfo.dbc patch + AccountScript in mod_assistant.cpp. Updated playerbots: 150-200 bots, invite players, chat broadcasts, blue gear cap, 50% imperfect gear, BG queuing, smart scale max 60. Rebuilt patch-4.MPQ with CharBaseInfo.dbc. |
 | 2026-06-14 | Added LAN config (realmlist, firewall, player guide), QoL settings (dual spec lvl 1, instant mail), create_account.py, docker-compose.override.yml docs, gotchas #9-10. Fixed DBC volume mount paths after repo cleanup. |
 | 2026-06-14 | Initial creation. Documented all 89 items (90000–90108), 10 set IDs (995–1004), vendor architecture, DBC formats, pipeline workflow, C++ scaling scripts, legendary weapon spells, XP bonus jewelry, user preferences, and 8 gotchas. Added mandatory self-referencing instructions. |
