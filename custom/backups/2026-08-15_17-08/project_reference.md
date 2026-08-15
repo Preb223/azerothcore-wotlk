@@ -451,6 +451,35 @@ docker exec ac-database mysqldump -u root -ppassword acore_world item_template -
 
 ---
 
+
+---
+
+## End-to-End Workflow: Creating Custom & Heirloom Items
+
+Follow this exact 7-step process when creating any heirloom, custom item, bag, or quiver:
+
+1. **ID Allocation & Registry**:
+   - Check `project_reference.md` for next available ID (`90000+`).
+   - Register ID in `project_reference.md` table and bump marker immediately.
+2. **Client Registration (`DBFilesClient/Item.dbc`)**:
+   - Add 8-field record: `(ID, Class, SubClass, SoundOverrideSubclass, Material, DisplayID, InventoryType, SheatheType)`.
+3. **Server Database Registration (`item_template` & `custom/sql/01_items.sql`)**:
+   - **Non-Weapons (Armor, Bags, Quivers, Jewelry)**: Set `dmg_min1 = 0`, `dmg_max1 = 0`, and `delay = 0`!
+   - **Heirlooms**: `Quality = 7`, `Flags = 134221824`, `bonding = 7`, `RequiredLevel = 1`, `ItemLevel = 1`.
+   - **Quivers/Pouches**: `class = 11`, `subclass`: 2 (Arrows), 3 (Bullets), `BagFamily`: 1 (Arrows), 2 (Bullets), 3 (Universal).
+   - **Ranged Speed**: Include equip spell `29414` (Quiver 15% speed) or `14829` (Ammo Pouch 15% speed) with `spelltrigger_1 = 1`.
+4. **Vendor Registration (`npc_vendor`)**:
+   - Add to vendor `9000000` (Weapons & Quivers) and `9000051` (Trinkets, Necklaces, Rings, Bags & Misc).
+   - Update `modules/mod-assistant/data/sql/world/mod_assistant.sql`.
+5. **MPQ Client Patching**:
+   - Run `python custom/package_client_patch.py`.
+   - If `Wow.exe` was running, restart the WoW Client to reload `Item.dbc` from `patch-4.MPQ`.
+6. **Server Memory Cache Flush**:
+   - Run `.reload item_template` and `.reload npc_vendor` in-game, or run `docker restart ac-worldserver`.
+7. **Documentation & Backup**:
+   - Update `doc/useful_gm_commands.md` and `custom/project_reference.md`.
+   - Run backup script `python scratch/create_full_backup.py`.
+
 ## User Preferences (Recorded)
 
 - Thunderfury heirloom size: **Leave as-is**

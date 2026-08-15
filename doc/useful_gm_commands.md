@@ -257,3 +257,28 @@ Spawn standard raid sets using **`.additem set <SetID>`**:
 | <span style="color:#0070DD; font-weight:bold;">Shaman</span> | Earthfury Vestments | `207` | The Ten Storms | `216` | Stormcaller's Garb | `498` | The Earthshatterer | `529` |
 | <span style="color:#8788EE; font-weight:bold;">Warlock</span> | Felheart Raiment | `203` | Nemesis Raiment | `212` | Doomcaller's Attire | `499` | Plagueheart Raiment | `523` |
 | <span style="color:#C69E6D; font-weight:bold;">Warrior</span> | Battlegear of Might | `209` | Battlegear of Wrath | `218` | Conqueror's Battlegear | `500` | Dreadnaught's Battlegear | `521` |
+
+
+### 🎯 5.3 Custom Heirloom Ranged Weapons, Relics & Cosmetic Gear
+
+#### 🎯 Throwing, Guns & Crossbows
+* 🎯 **Shadowblade Throwing Star** (Heirloom Throwing Weapon): `.additem 90114`
+  * 📜 *Description*: "An infinite shadowblade forged for stealthy precision." (Infinite ammo, Agi/Sta/AP/Crit, +5% XP).
+* 🔫 **Dwarven Dragon-Rifle** (Heirloom Gun): `.additem 90115`
+  * 📜 *Description*: "Engineered in Ironforge to unleash dragonfire." (Agi/Sta/AP/Crit, +10% XP).
+* 🏹 **Arbalest of the Windrunner** (Heirloom Crossbow): `.additem 90116`
+  * 📜 *Description*: "Crafted for elven rangers with deadly accuracy." (Agi/Sta/AP/ArPen, +10% XP).
+* 🪄 **Baton of Nether Energies** (Heirloom Wand): `.additem 90117`
+  * 📜 *Description*: "Channels raw arcane energy without draining mana." (Int/Sta/SP/Crit, +5% XP).
+
+#### ✝️ Class Relics
+* 📜 **Libram of Divine Purpose** (Paladin Relic): `.additem 90118`
+* 🗿 **Totem of Elemental Fury** (Shaman Relic): `.additem 90119`
+* 🐾 **Idol of the Wild Spirit** (Druid Relic): `.additem 90120`
+* 💀 **Sigil of the Frozen Throne** (Death Knight Relic): `.additem 90121`
+
+#### 🎽 XP Cosmetics & Shirts
+* 🌀 **Portalstone of the Wayfarer** (Heirloom Dark Gateway Portalstone): `.additem 90124`
+  * 📜 *Description*: "Summons a Dark Gateway portal to your home for 60 seconds (0s cooldown)." (Teleports caster or group members to bound inn).
+* 🏷️ **Tabard of the Veteran Adventurer** (Heirloom Tabard): `.additem 90122` (+10% XP).
+* 👕 **Shirt of the Hero** (Heirloom Shirt): `.additem 90123` (+5% Movement Speed & +5% XP).

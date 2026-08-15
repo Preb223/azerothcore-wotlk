@@ -3,6 +3,7 @@ import zlib
 import os
 
 CLIENT_MPQ_PATH = r'C:\ChromieCraft_3.3.5a\Data\patch-4.MPQ'
+FALLBACK_MPQ_PATH = r'custom\patch-4.MPQ'
 
 def generate_crypt_table():
     seed = 0x00100001
@@ -75,7 +76,7 @@ def create_mpq(files, output_path):
         raw_data += block_data
 
     # Generate hash table
-    hash_table = [{'hash_a': 0xFFFFFFFF, 'hash_b': 0xFFFFFFFF, 'locale': 0xFFFF, 'platform': 0, 'block_index': 0xFFFFFFFF, 'reserved': 0} for _ in range(hash_table_size)]
+    hash_table = [{'hash_a': 0xFFFFFFFF, 'hash_b': 0xFFFFFFFF, 'locale': 0, 'platform': 0, 'block_index': 0xFFFFFFFF, 'reserved': 0} for _ in range(hash_table_size)]
     
     for block_index, entry in enumerate(file_entries):
         path = entry['path']
@@ -128,22 +129,27 @@ def create_mpq(files, output_path):
     enc_block_data = encrypt_block(block_data, block_key)
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'wb') as f:
-        f.write(b'MPQ\x1A')
-        f.write(struct.pack('<I', header_size))
-        f.write(struct.pack('<I', archive_size))
-        f.write(struct.pack('<H', 0)) # version
-        f.write(struct.pack('<H', 3)) # sector size shift
-        f.write(struct.pack('<I', hash_table_offset))
-        f.write(struct.pack('<I', block_table_offset))
-        f.write(struct.pack('<I', hash_table_size))
-        f.write(struct.pack('<I', len(file_entries)))
+    try:
+        with open(output_path, 'wb') as f:
+            f.write(b'MPQ\x1A')
+            f.write(struct.pack('<I', header_size))
+            f.write(struct.pack('<I', archive_size))
+            f.write(struct.pack('<H', 0)) # version
+            f.write(struct.pack('<H', 3)) # sector size shift
+            f.write(struct.pack('<I', hash_table_offset))
+            f.write(struct.pack('<I', block_table_offset))
+            f.write(struct.pack('<I', hash_table_size))
+            f.write(struct.pack('<I', len(file_entries)))
 
-        f.write(raw_data)
-        f.write(enc_hash_data)
-        f.write(enc_block_data)
-
-    print(f"Successfully created {output_path} ({os.path.getsize(output_path)} bytes)")
+            f.write(raw_data)
+            f.write(enc_hash_data)
+            f.write(enc_block_data)
+        print(f"Successfully created {output_path} ({os.path.getsize(output_path)} bytes)")
+    except PermissionError:
+        print(f"WARNING: Permission denied writing to {output_path} (WoW Client is running).")
+        if output_path != FALLBACK_MPQ_PATH:
+            print(f"Saving copy to {FALLBACK_MPQ_PATH}...")
+            create_mpq(files, FALLBACK_MPQ_PATH)
 
 if __name__ == '__main__':
     files = {}
@@ -153,7 +159,6 @@ if __name__ == '__main__':
         for root, _, filenames in os.walk(patch_dir):
             for name in filenames:
                 file_path = os.path.join(root, name)
-                # MPQ uses backslashes for paths inside the archive
                 archive_path = os.path.relpath(file_path, patch_dir).replace('/', '\\')
                 with open(file_path, 'rb') as f:
                     files[archive_path] = f.read()
