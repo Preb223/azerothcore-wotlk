@@ -499,7 +499,7 @@ Follow this exact 7-step process when creating any heirloom, custom item, bag, o
 - Auto-learn spells: **Enabled** via `mod-learn-spells` module
 - Quest item sparkles: **Already enabled** (`Visibility.ObjectSparkles = 1`)
 - Individual Progression Balance: **VanillaPowerAdjustment = 0.6** (60% damage scaling), **VanillaHealingAdjustment = 1.0** (100% full healing output)
-- Playerbots: **150–200 bots**, synced level with players, max 3 levels above highest player, blue gear cap, 50% imperfect gear, bots invite players, chat enabled, BGs enabled
+- Playerbots: **1,000–1,500 bots**, synced level with players (±3 levels of current logged in players), max level 60, blue gear cap, 50% imperfect gear, bots invite players, chat enabled, BGs enabled
 
 ---
 
@@ -533,6 +533,7 @@ Follow this exact 7-step process when creating any heirloom, custom item, bag, o
 
 | Date | Summary |
 |------|---------|
+| 2026-08-16 | Completed full server migration to macOS (Apple M4 Max, 16GB Docker RAM). Restored all characters, accounts, playerbots, and world DB. Scaled playerbots to 1,000–1,500 concurrent bots with level sync (±3 levels of active players, max level 60). |
 | 2026-08-15 | Fixed Barman Shanker (90110). Added 3 custom 36-slot Heirloom Quivers & Ammo Pouches (90111-90113): Quiver of the Infinite Hunt (universal 36-slot), Quiver of the Windrunner (arrows 36-slot), and Ammo Pouch of the Dragonflight (bullets 36-slot) with built-in 15% speed, +2% crit, and +5% XP. Integrated with Gabriella Special Item Vendor, patched Item.dbc, rebuilt patch-4.MPQ, updated useful_gm_commands.md with class colors and formatting, and created timestamped database backup. |
 | 2026-06-14 | Installed mod-learn-spells (auto-learn class spells on level up). Added Undead Paladin (race=5/class=2) restricted to account 1: playercreateinfo DB row + CharBaseInfo.dbc patch + AccountScript in mod_assistant.cpp. Updated playerbots: 150-200 bots, invite players, chat broadcasts, blue gear cap, 50% imperfect gear, BG queuing, smart scale max 60. Rebuilt patch-4.MPQ with CharBaseInfo.dbc. |
 | 2026-06-14 | Added LAN config (realmlist, firewall, player guide), QoL settings (dual spec lvl 1, instant mail), create_account.py, docker-compose.override.yml docs, gotchas #9-10. Fixed DBC volume mount paths after repo cleanup. |
