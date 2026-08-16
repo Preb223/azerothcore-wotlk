@@ -30,22 +30,7 @@ PORTAL_MAPPINGS = {
     35717: 90210, # Portal: Shattrath (Horde)
     53142: 90211, # Portal: Dalaran
     49360: 90212, # Portal: Theramore
-    49361: 90213, # Portal: Stonard
-
-    # Teleports (Original ID -> New Cloned ID)
-    3561:  90214, # Teleport: Stormwind
-    3562:  90215, # Teleport: Ironforge
-    3563:  90216, # Teleport: Darnassus
-    32271: 90217, # Teleport: Exodar
-    3567:  90218, # Teleport: Orgrimmar
-    3566:  90219, # Teleport: Undercity
-    3565:  90220, # Teleport: Thunder Bluff
-    32272: 90221, # Teleport: Silvermoon
-    33690: 90222, # Teleport: Shattrath (Alliance)
-    35715: 90223, # Teleport: Shattrath (Horde)
-    53140: 90224, # Teleport: Dalaran
-    49359: 90225, # Teleport: Theramore
-    49358: 90226  # Teleport: Stonard
+    49361: 90213  # Portal: Stonard
 }
 
 def patch_spell_dbc():
@@ -59,8 +44,8 @@ def patch_spell_dbc():
             records.append(bytearray(f.read(record_size)))
         string_block = bytearray(f.read(string_block_size))
 
-    # Remove existing target IDs if re-running
-    target_ids = set(PORTAL_MAPPINGS.values())
+    # Remove existing custom target IDs if re-running
+    target_ids = set(range(90200, 90230))
     records = [r for r in records if struct.unpack('<I', r[:4])[0] not in target_ids]
 
     # Custom description string offset for 90200
