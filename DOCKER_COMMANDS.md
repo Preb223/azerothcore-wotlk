@@ -9,6 +9,9 @@ Quick reference guide for starting, stopping, managing, and connecting to your l
 Before running the server, make sure **Docker Desktop** is running.
 
 ```bash
+# Open terminal to azerothcore-wotlk directory
+cd ~/Documents/GitHub/azerothcore-wotlk
+
 # Launch Docker Desktop if not already open
 open -a Docker
 
