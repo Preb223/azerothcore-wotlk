@@ -1,6 +1,22 @@
 # Auto detect text files and perform LF normalization
 * text eol=lf
 
+# Binary files - prevent CRLF/LF line ending normalization
+*.gz binary
+*.MPQ binary
+*.mpq binary
+*.dbc binary
+*.zip binary
+*.tar binary
+*.7z binary
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
 # Whitespace rules
 # strict (no trailing, no tabs)
 *.cpp    whitespace=trailing-space,space-before-tab,tab-in-indent,cr-at-eol
