@@ -14,23 +14,16 @@ def get_dbc_path(name):
     return patched if os.path.exists(patched) else orig
 
 PORTAL_MAPPINGS = {
-    # Item Use Spell
-    28148: 90200, # Portalstone Item Use Spell
+    # Item Use Spell: Clone 8690 (Hearthstone) -> 90200 (Portalstone Item Use Spell)
+    8690: 90200,
 
     # Portals (Original ID -> New Cloned ID)
     10059: 90201, # Portal: Stormwind
     11416: 90202, # Portal: Ironforge
     11419: 90203, # Portal: Darnassus
-    32266: 90204, # Portal: Exodar
     11417: 90205, # Portal: Orgrimmar
     11418: 90206, # Portal: Undercity
     11420: 90207, # Portal: Thunder Bluff
-    32267: 90208, # Portal: Silvermoon
-    33691: 90209, # Portal: Shattrath (Alliance)
-    35717: 90210, # Portal: Shattrath (Horde)
-    53142: 90211, # Portal: Dalaran
-    49360: 90212, # Portal: Theramore
-    49361: 90213  # Portal: Stonard
 }
 
 def patch_spell_dbc():

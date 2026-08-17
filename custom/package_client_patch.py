@@ -2,8 +2,9 @@ import struct
 import zlib
 import os
 
-CLIENT_MPQ_PATH = r'C:\ChromieCraft_3.3.5a\Data\patch-4.MPQ'
-FALLBACK_MPQ_PATH = r'custom\patch-4.MPQ'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CLIENT_MPQ_PATH = r'C:\ChromieCraft_3.3.5a\Data\patch-4.MPQ' if os.name == 'nt' else os.path.join(SCRIPT_DIR, 'patch-4.MPQ')
+FALLBACK_MPQ_PATH = os.path.join(SCRIPT_DIR, 'patch-4.MPQ')
 
 def generate_crypt_table():
     seed = 0x00100001
