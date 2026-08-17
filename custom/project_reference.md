@@ -492,6 +492,10 @@ Follow this exact 7-step process when creating any heirloom, custom item, bag, o
 - Necklaces/Rings vendor: **Trinkets & Miscellaneous** (9000051)
 - Corruptor T5 set: **Nemesis base stats** + **real T5 set bonuses**
 - Custom scripts: **Live in `custom/` subdirectory**
+- Server Expansion: **Vanilla (Expansion = 0, Patch 1.12.1 pre-TBC)**
+- Max Level: **60 (Vanilla cap)**
+- Continents/Maps: **Eastern Kingdoms (0) and Kalimdor (1)** (Outland & Northrend disabled)
+- Auction House Bot: **`mod-ah-bot` enabled** (populates 15,000 items per AH: Alliance, Horde, Neutral; 45,000 total active listings capped at Level 60 / 300 skill)
 - Dual spec: **Available from level 1** (MinDualSpecLevel = 1)
 - Mail delivery: **Instant** (MailDeliveryDelay = 0)
 - Auto-account creation: **Via `custom/create_account.py`** (SOAP + DB fallback)
@@ -499,7 +503,7 @@ Follow this exact 7-step process when creating any heirloom, custom item, bag, o
 - Auto-learn spells: **Enabled** via `mod-learn-spells` module
 - Quest item sparkles: **Already enabled** (`Visibility.ObjectSparkles = 1`)
 - Individual Progression Balance: **VanillaPowerAdjustment = 0.6** (60% damage scaling), **VanillaHealingAdjustment = 1.0** (100% full healing output)
-- Playerbots: **600–800 bots**, 50% city/town population ratio, synced level with players (±5 levels of current logged in players), max level 60, blue gear cap, 50% imperfect gear, bots invite players, chat enabled, BGs enabled
+- Playerbots: **600–800 bots**, 50% city/town population ratio, synced level with players (±5 levels of current logged in players), max level 60, Vanilla Tier 3 gear cap (iLvl 92), Vanilla talent limitation, bots invite players, chat enabled, BGs enabled
 
 ---
 
@@ -533,6 +537,8 @@ Follow this exact 7-step process when creating any heirloom, custom item, bag, o
 
 | Date | Summary |
 |------|---------|
+| 2026-08-17 | Installed and compiled `mod-ah-bot` (AuctionHouseBot) into worldserver. Configured dedicated `AHBOT` account (ID 200) with level 1–60 Vanilla item filters, profession materials, and trade goods across Alliance, Horde, and Neutral auction houses. |
+| 2026-08-17 | Configured pure Vanilla (Patch 1.12.1 pre-TBC) realm: `Expansion = 0`, `MaxPlayerLevel = 60`, disabled post-3.3 low-level regen boost, set Vanilla BG formulas (Arathi 2000 points, Alterac 389 rep), locked bot maps to Eastern Kingdoms & Kalimdor, enabled Vanilla talent simulated caps, and set bot max gear to Vanilla Tier 3 / Naxx 40 (iLvl 92). |
 | 2026-08-16 | Completed full server migration to macOS (Apple M4 Max, 16GB Docker RAM). Restored all characters, accounts, playerbots, and world DB. Integrated and compiled `mod-playerbots`, `mod-assistant`, and `mod-learn-spells` into worldserver image. Configured 600–800 active bots, 50% city population distribution, level sync (±5 levels of active players, max level 60). Server running at ~4GB / 16GB RAM. |
 | 2026-08-15 | Fixed Barman Shanker (90110). Added 3 custom 36-slot Heirloom Quivers & Ammo Pouches (90111-90113): Quiver of the Infinite Hunt (universal 36-slot), Quiver of the Windrunner (arrows 36-slot), and Ammo Pouch of the Dragonflight (bullets 36-slot) with built-in 15% speed, +2% crit, and +5% XP. Integrated with Gabriella Special Item Vendor, patched Item.dbc, rebuilt patch-4.MPQ, updated useful_gm_commands.md with class colors and formatting, and created timestamped database backup. |
 | 2026-06-14 | Installed mod-learn-spells (auto-learn class spells on level up). Added Undead Paladin (race=5/class=2) restricted to account 1: playercreateinfo DB row + CharBaseInfo.dbc patch + AccountScript in mod_assistant.cpp. Updated playerbots: 150-200 bots, invite players, chat broadcasts, blue gear cap, 50% imperfect gear, BG queuing, smart scale max 60. Rebuilt patch-4.MPQ with CharBaseInfo.dbc. |
